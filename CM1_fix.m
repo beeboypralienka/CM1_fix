@@ -8,12 +8,12 @@ clc; clear;
 % -----------------------------
 % Load file CSV dataset mentah
 % -----------------------------
-CM1_01_Dataset = csvread('CM1.csv');
+CM1_01_Dataset = csvread('01_Data\CM1.csv');
 
 % ----------------------------------------
 % Load file CSV dataset (remove duplicate)
 % ----------------------------------------
-CM1_02_Unique = csvread('CM1Unique.csv');
+CM1_02_Unique = csvread('01_Data\CM1Unique.csv');
 
 %==================================================================================================================================================================================
 %                                              ********************** EBD FASE 1 **********************
@@ -427,8 +427,9 @@ if  uniqueTanpaKelas ~= uniqueDenganKelas % Data unique tanpa kelas ~= data uniq
     % Transformasi data NUMERIK ke HEXA berdasarkan BEST split 1, 2A, dan 2B
     % -----------------------------------------------------------------------
     % Alasan konversi ke HEXA, agar bisa menghilangkan redundansi
-    % Kalau ke string, ketika diimplementasi fungsi unique datanya jadi 4 saja
-    % Kalau ke biner, sulit, karena menggunakan cell di dalam cell untuk implementasi unique, perlu effort lebih
+    % Kalau ke string, ketika diimplementasi fungsi unique datanya jadi 4
+    % saja yaitu 00, 01, 10, dan 11
+    % Kalau ke biner, sulit, karena ada cell di dalam cell, jadi perlu effort lebih menghilangkan redundansi
     
         
     % ---------------
@@ -626,6 +627,6 @@ toc
 
 disp('Saving...');
     tic
-        save('Hasil\CM1_fix.mat');        
+        save('02_EBD\CM1_fix.mat');        
     toc
 disp('Done!');
