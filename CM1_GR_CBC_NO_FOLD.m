@@ -13,7 +13,7 @@ CM1_01_GR = csvread('03_SeleksiFitur\CM1_GR\CM1_GR.csv');
 % --------------------------------
 % Pembagian dataset secara manual:
 % TRAINING (66%)
-% TESTING (33%)
+% TESTING (34%)
 % --------------------------------
 jmlDataset = length(CM1_01_GR);
 perTraining = jmlDataset * (66/100);
@@ -225,7 +225,20 @@ for iFitur = 1 : 21
 end
 clear iBarisBagi iFitur fgC1 fgC2;
 
-% rata2 fitur
+% ----------------------------
+% MEAN anggota fitur C1 dan C2
+% ----------------------------
+for iFitur = 1 : 21        
+    % ---------------------------------------------------------------------
+    % Hitung MEAN setiap fitur "CM1_13_Anggota_C1" dan "CM1_14_Anggota_C2"
+    % ---------------------------------------------------------------------
+    CM1_15_Mean_C1{1,iFitur}(1,:) = mean(CM1_13_Anggota_C1{1,iFitur});       
+        
+    if length(CM1_14_Anggota_C2{1,iFitur}) ~= 0        
+        CM1_16_Mean_C2{1,iFitur}(1,:) = mean(CM1_14_Anggota_C2{1,iFitur});       
+    end    
+end
+clear iBaris iFitur;
 
 % while anggota tidak berubah, maka hentikan
 
