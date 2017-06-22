@@ -26,7 +26,7 @@ for iFitur = 1 : 21
         %-------------------------------------------
         % Untuk menghitung iterasi hingga konvergen
         %-------------------------------------------
-        jumlahIterasi{1,iFitur}{iFold,1} = 0;
+        CM1_44_JumlahIterasi{1,iFitur}{iFold,1} = 0;
         
         %-------------------------------------
         % Penetapan data TRAINING dan TESTING
@@ -59,7 +59,7 @@ for iFitur = 1 : 21
         %----------------------------------------------------------------------------------------------------------
         fgFalse = 0;
         fgTrue = 0;        
-        for iJumlahTrain = 1 : length(CM1_02_Train{1,iFitur}{iFold,1})                                    
+        for iJumlahTrain = 1 : size(CM1_02_Train{1,iFitur}{iFold,1},1)                                    
             if CM1_02_Train{1,iFitur}{iFold,1}(iJumlahTrain,iFitur+1) == 0 %---- FALSE              
                 fgFalse = fgFalse + 1;
                 CM1_04_Train_False{1,iFitur}{iFold,1}(fgFalse,:) = CM1_02_Train{1,iFitur}{iFold,1}(iJumlahTrain,:);             
@@ -73,14 +73,14 @@ for iFitur = 1 : 21
         %---------------------------------------------------
         % Tentukan C1 dari kumpulan kelas FALSE secara acak
         %---------------------------------------------------   
-        kFalse = randperm(length(CM1_04_Train_False{1,iFitur}{iFold,1})); % acak urutan data "trainingFalse"
+        kFalse = randperm(size(CM1_04_Train_False{1,iFitur}{iFold,1},1)); % acak urutan data "trainingFalse"
         CM1_06_Titik_C1{1,iFitur}{iFold,1} = CM1_04_Train_False{1,iFitur}{iFold,1}(kFalse(1,1),:); % urutan pertama hasil acak, diambil sebagai C1
         clear kFalse;       
 
         %--------------------------------------------------
         % Tentukan C2 dari kumpulan kelas TRUE secara acak
         %--------------------------------------------------
-        kTrue = randperm(length(CM1_05_Train_True{1,iFitur}{iFold,1})); % acak urutan data "trainingTrue"
+        kTrue = randperm(size(CM1_05_Train_True{1,iFitur}{iFold,1},1)); % acak urutan data "trainingTrue"
         CM1_07_Titik_C2{1,iFitur}{iFold,1} = CM1_05_Train_True{1,iFitur}{iFold,1}(kTrue(1,1),:); % urutan pertama hasil acak, diambil sebagai C2
         clear kTrue;
         
@@ -92,7 +92,7 @@ for iFitur = 1 : 21
         % Hitung hamming distance masing-masing fitur terhadap C1 dan C2
         %----------------------------------------------------------------
         for iKolomCluster = 1 : iFitur
-            for iBarisCluster = 1 : length(CM1_02_Train{1,iFitur}{iFold,1})              
+            for iBarisCluster = 1 : size(CM1_02_Train{1,iFitur}{iFold,1},1)              
                 %------------------------------------
                 % Hitung jarak data ke titik cluster
                 %------------------------------------
@@ -124,7 +124,7 @@ for iFitur = 1 : 21
         %-------------------------------------------------------------------
         % Penentuan anggota C1 atau C2 berdasarkan jarak rata-rata terdekat
         %-------------------------------------------------------------------
-        for iBarisAvg = 1 : length(CM1_02_Train{1,iFitur}{iFold,1})
+        for iBarisAvg = 1 : size(CM1_02_Train{1,iFitur}{iFold,1},1)
             averageC1 = CM1_10_Avg_HamDist{1,iFitur}{iFold,1}(iBarisAvg,1);
             averageC2 = CM1_10_Avg_HamDist{1,iFitur}{iFold,1}(iBarisAvg,2);                                    
             if averageC1 > averageC2                
@@ -139,7 +139,7 @@ for iFitur = 1 : 21
         %----------------------------------------------------------
         fgC1 = 0;
         fgC2 = 0;
-        for iBarisKelompok = 1 : length(CM1_02_Train{1,iFitur}{iFold,1})  
+        for iBarisKelompok = 1 : size(CM1_02_Train{1,iFitur}{iFold,1},1)  
             if CM1_10_Avg_HamDist{1,iFitur}{iFold,1}(iBarisKelompok,3) == 11111     
                 fgC1 = fgC1 + 1;
                 CM1_11_Anggota_C1{1,iFitur}{iFold,1}(fgC1,:) = CM1_02_Train{1,iFitur}{iFold,1}(iBarisKelompok,1:iFitur+2);                
@@ -151,7 +151,7 @@ for iFitur = 1 : 21
         %-------------------------------------------------------------------------------------------------------------
         % Prevent Fold "CM1_12_Anggota_C2" yang hilang karena tidak dianggap ada oleh matLab, dibuat matrix kosong []  
         %-------------------------------------------------------------------------------------------------------------
-        if size(CM1_11_Anggota_C1{1,iFitur}{iFold,1},1) == length(CM1_02_Train{1,iFitur}{iFold,1})
+        if size(CM1_11_Anggota_C1{1,iFitur}{iFold,1},1) == size(CM1_02_Train{1,iFitur}{iFold,1},1)
             CM1_12_Anggota_C2{1,iFitur}{iFold,1} = [];
         end        
         clear fgC1 fgC2 iBarisKelompok;    
@@ -178,7 +178,7 @@ for iFitur = 1 : 21
         %----------------------------------------------------------------------------------------------------------
         % Prevent Fold "CM1_14_Mean_C2" yang hilang karena tidak dianggap ada oleh matLab, dibuat matrix kosong []  
         %----------------------------------------------------------------------------------------------------------
-        if size(CM1_11_Anggota_C1{1,iFitur}{iFold,1},1) == length(CM1_02_Train{1,iFitur}{iFold,1})
+        if size(CM1_11_Anggota_C1{1,iFitur}{iFold,1},1) == size(CM1_02_Train{1,iFitur}{iFold,1},1)
             CM1_14_Mean_C2{1,iFitur}{iFold,1} = [];
         end
         
@@ -195,8 +195,8 @@ for iFitur = 1 : 21
             %---------
             % MEAN C2
             %---------
-            if length(CM1_14_Mean_C2{1,iFitur}) ~= 0
-                if length(CM1_14_Mean_C2{1,iFitur}{iFold,1}) ~= 0
+            if size(CM1_14_Mean_C2{1,iFitur},1) ~= 0
+                if size(CM1_14_Mean_C2{1,iFitur}{iFold,1},1) ~= 0
                     nilaiMeanC2 = CM1_14_Mean_C2{1,iFitur}{iFold,1}(1,iSeleksiFitur);
                     pembulatanC2 = pembulatanMEAN_fix(nilaiMeanC2);
                     CM1_16_Titik_C2_New{1,iFitur}{iFold,1}(1,iSeleksiFitur) = pembulatanC2;
@@ -205,7 +205,7 @@ for iFitur = 1 : 21
             %------------------------------------------------------------------------------------------------
             % Prevent Fold < 10 untuk anggota C2, jadi metrik kosong di akhir dianggap tidak ada sama matLab    
             %------------------------------------------------------------------------------------------------
-            if length(CM1_11_Anggota_C1{1,iFitur}{iFold,1}) == length(CM1_02_Train{1,iFitur}{iFold,1})
+            if length(CM1_11_Anggota_C1{1,iFitur}{iFold,1}) == size(CM1_02_Train{1,iFitur}{iFold,1},1)
                 CM1_16_Titik_C2_New{1,iFitur}{iFold,1} = [];
             end            
         end
@@ -219,7 +219,7 @@ for iFitur = 1 : 21
         % Hitung hamming distance masing-masing fitur terhadap "C1_new" dan "C2_new"
         %----------------------------------------------------------------------------
         for iKolomCluster = 1 : iFitur
-            for iBarisCluster = 1 : length(CM1_02_Train{1,iFitur}{iFold,1})              
+            for iBarisCluster = 1 : size(CM1_02_Train{1,iFitur}{iFold,1},1)              
                 %-------------------------------------------
                 % Hitung jarak data ke titik cluster "new"
                 %-------------------------------------------
@@ -235,7 +235,7 @@ for iFitur = 1 : 21
                 %------------------------------
                 % Jarak tiap fitur ke "C2_new"
                 %------------------------------                
-                if length(CM1_16_Titik_C2_New{1,iFitur}{iFold,1}) ~= 0                                        
+                if size(CM1_16_Titik_C2_New{1,iFitur}{iFold,1},1) ~= 0                                        
                     C2 = CM1_16_Titik_C2_New{1,iFitur}{iFold,1}(1,iKolomCluster);                  
                     jarakHamming = hammingDistance_fix(data,C2);
                     CM1_18_HamDist_C2_new{1,iFitur}{iFold,1}(iBarisCluster,iKolomCluster) = jarakHamming;                    
@@ -268,7 +268,7 @@ for iFitur = 1 : 21
         %-------------------------------------------------------------------------------
         % Penentuan anggota "C1_new" atau "C2_new" berdasarkan jarak rata-rata terdekat
         %-------------------------------------------------------------------------------
-        for iBarisAvg = 1 : length(CM1_02_Train{1,iFitur}{iFold,1})        
+        for iBarisAvg = 1 : size(CM1_02_Train{1,iFitur}{iFold,1},1)        
             averageC1 = CM1_19_Avg_HamDist_new{1,iFitur}{iFold,1}(iBarisAvg,1);            
             averageC2 = CM1_19_Avg_HamDist_new{1,iFitur}{iFold,1}(iBarisAvg,2);                                 
             if averageC1 > averageC2                                
@@ -283,7 +283,7 @@ for iFitur = 1 : 21
         %----------------------------------------------------------------------
         fgC1 = 0;
         fgC2 = 0;
-        for iBarisKelompok = 1 : length(CM1_02_Train{1,iFitur}{iFold,1})  
+        for iBarisKelompok = 1 : size(CM1_02_Train{1,iFitur}{iFold,1},1)  
             if CM1_19_Avg_HamDist_new{1,iFitur}{iFold,1}(iBarisKelompok,3) == 11111     
                 fgC1 = fgC1 + 1;
                 CM1_20_Anggota_C1_new{1,iFitur}{iFold,1}(fgC1,:) = CM1_02_Train{1,iFitur}{iFold,1}(iBarisKelompok,1:iFitur+2);                
@@ -316,7 +316,7 @@ for iFitur = 1 : 21
         %------------------------------------------------------------------------------------------------------------------
         % Prevent Fold "CM1_27_Anggota_C2_Temp" yang hilang karena tidak dianggap ada oleh matLab, dibuat matrix kosong []
         %------------------------------------------------------------------------------------------------------------------
-        if length(CM1_24_Anggota_C2_Awal{1,iFitur}{iFold,1}) ~=0            
+        if size(CM1_24_Anggota_C2_Awal{1,iFitur}{iFold,1},1) ~=0            
             CM1_27_Anggota_C2_Temp{1,iFitur}{iFold,1} = CM1_24_Anggota_C2_Awal{1,iFitur}{iFold,1};
         else CM1_27_Anggota_C2_Temp{1,iFitur}{iFold,1} = [];
         end                                                               
@@ -336,8 +336,8 @@ for iFitur = 1 : 21
             %-----------------------------------------
             % Hitung MEAN per fitur anggota C2 "temp"
             %-----------------------------------------
-            if length(CM1_27_Anggota_C2_Temp{1,iFitur}) ~= 0            
-                if length(CM1_27_Anggota_C2_Temp{1,iFitur}{iFold,1}) ~= 0                  
+            if size(CM1_27_Anggota_C2_Temp{1,iFitur},1) ~= 0            
+                if size(CM1_27_Anggota_C2_Temp{1,iFitur}{iFold,1},1) ~= 0                  
                     %---------------------------------------------------------
                     % Kondisi kalau baris datanya cuma 1, ga usah hitung mean
                     %---------------------------------------------------------
@@ -350,7 +350,7 @@ for iFitur = 1 : 21
             %---------------------------------------------------------------------------------------------------------------
             % Prevent Fold "CM1_28_Mean_C2_Temp" yang hilang karena tidak dianggap ada oleh matLab, dibuat matrix kosong []  
             %---------------------------------------------------------------------------------------------------------------
-            if length(CM1_26_Anggota_C1_Temp{1,iFitur}{iFold,1}) == length(CM1_02_Train{1,iFitur}{iFold,1})
+            if size(CM1_26_Anggota_C1_Temp{1,iFitur}{iFold,1},1) == size(CM1_02_Train{1,iFitur}{iFold,1},1)
                 CM1_30_Mean_C2_Temp{1,iFitur}{iFold,1} = [];
             end
         
@@ -367,17 +367,17 @@ for iFitur = 1 : 21
                 %---------
                 % MEAN C2
                 %---------
-                if length(CM1_30_Mean_C2_Temp{1,iFitur}) ~= 0
-                    if length(CM1_30_Mean_C2_Temp{1,iFitur}{iFold,1}) ~= 0
+                %if length(CM1_30_Mean_C2_Temp{1,iFitur}) ~= 0
+                    if size(CM1_30_Mean_C2_Temp{1,iFitur}{iFold,1},1) ~= 0
                         nilaiMeanC2 = CM1_30_Mean_C2_Temp{1,iFitur}{iFold,1}(1,iSeleksiFitur);
                         pembulatanC2 = pembulatanMEAN_fix(nilaiMeanC2);
                         CM1_32_Titik_C2_Temp{1,iFitur}{iFold,1}(1,iSeleksiFitur) = pembulatanC2;
                     end
-                end             
+                %end             
                 %------------------------------------------------------------------------------------------------
                 % Prevent Fold < 10 untuk anggota C2, jadi metrik kosong di akhir dianggap tidak ada sama matLab    
                 %------------------------------------------------------------------------------------------------
-                if length(CM1_26_Anggota_C1_Temp{1,iFitur}{iFold,1}) == length(CM1_02_Train{1,iFitur}{iFold,1})
+                if size(CM1_26_Anggota_C1_Temp{1,iFitur}{iFold,1},1) == size(CM1_02_Train{1,iFitur}{iFold,1},1)
                     CM1_32_Titik_C2_Temp{1,iFitur}{iFold,1} = [];
                 end            
             end
@@ -487,11 +487,11 @@ for iFitur = 1 : 21
                     konvergen = false;                
                     break
                 else
-                    jumlahIterasi{1,iFitur}{iFold,1} = jumlahIterasi{1,iFitur}{iFold,1} + 1;
+                    CM1_44_JumlahIterasi{1,iFitur}{iFold,1} = CM1_44_JumlahIterasi{1,iFitur}{iFold,1} + 1;
                     %------------------------------
                     % Pembatasan iterasi konvergen
                     %------------------------------
-                    if jumlahIterasi{1,iFitur}{iFold,1} == 10
+                    if CM1_44_JumlahIterasi{1,iFitur}{iFold,1} == 1000
                         konvergen = false;
                         break;
                     end
@@ -566,14 +566,21 @@ for iFitur = 1 : 21
             if CM1_41_Test_Avg_HamDist{1,iFitur}{iFold,1}(iBarisKelompok,3) == 11111                     
                 fgC1 = fgC1 + 1;
                 CM1_42_Test_Anggota_C1{1,iFitur}{iFold,1}(fgC1,:) = CM1_03_Test{1,iFitur}{iFold,1}(iBarisKelompok,1:iFitur+2);                
-%                 CM1_43_Test_Anggota_C2{1,iFitur}{iFold,1} = [];
             else     
                 fgC2 = fgC2 + 1;
-                CM1_43_Test_Anggota_C2{1,iFitur}{iFold,1}(fgC2,:) = CM1_03_Test{1,iFitur}{iFold,1}(iBarisKelompok,1:iFitur+2);                                        
-                 CM1_42_Test_Anggota_C1{1,iFitur}{iFold,1} = [];
+                CM1_43_Test_Anggota_C2{1,iFitur}{iFold,1}(fgC2,:) = CM1_03_Test{1,iFitur}{iFold,1}(iBarisKelompok,1:iFitur+2);                             
             end                                                                  
-        end                          
-        clear fgC1 fgC2 iBarisKelompok;          
+        end           
+        
+        %---------------------------------------------------
+        % Cek kalau avg kelompoknya C2 semua atau C1 semua
+        %---------------------------------------------------
+        if fgC1 == size(CM1_03_Test{1,iFitur}{iFold,1},1)
+            CM1_43_Test_Anggota_C2{1,iFitur}{iFold,1} = [];                 
+        elseif fgC2 == size(CM1_03_Test{1,iFitur}{iFold,1},1)
+            CM1_42_Test_Anggota_C1{1,iFitur}{iFold,1} = [];
+        end
+        clear fgC1 fgC2 iBarisKelompok;                                  
         
         %-----------------------------------------------------------------------------------------------------------------
         % Prevent Fold "CM1_43_Test_Anggota_C2" yang hilang karena tidak dianggap ada oleh matLab, dibuat matrix kosong []  
@@ -591,83 +598,153 @@ for iFitur = 1 : 21
             if size(CM1_43_Test_Anggota_C2{1,iFitur}{iFold,1},1) == size(CM1_03_Test{1,iFitur}{iFold,1},1)
                 CM1_42_Test_Anggota_C1{1,iFitur}{iFold,1} = [];
             end
-        end
-        
-        %--------------------------
-        % Hitung confussion metrik
-        %--------------------------                
-        
-        %--------------------------------
-        % Cek anggota C2 untuk TP dan FP
-        %--------------------------------
-        countTP = 0;
-        countFP = 0;
-        for iBarisC2 = 1 : size(CM1_43_Test_Anggota_C2{1,iFitur}{iFold,1},1)
-            if CM1_43_Test_Anggota_C2{1,iFitur}{iFold,1}(iBarisC2,iFitur+1) == 1
-                countTP = countTP + 1;
-                TP{1,iFitur}{iFold,1} = countTP;
-            else
-                countFP = countFP + 1;
-                FP{1,iFitur}{iFold,1} = countFP;
-                TP{1,iFitur}{iFold,1} = 0;
-            end            
-        end        
+        end   
+                                
+%==============================================================================================
+%                              ==  CM1_45_TP_ && CM1_46_FP_  ===
+%==============================================================================================         
+
         %-----------------------------------------
         % Kalau anggota C2 emang gada sama sekali
         %-----------------------------------------
+        countTP = 0;
+        countFP = 0;
         if size(CM1_43_Test_Anggota_C2{1,iFitur}{iFold,1},1) == 0
-            TP{1,iFitur}{iFold,1} = 0;
-            FP{1,iFitur}{iFold,1} = 0;
+            CM1_45_TP_{1,iFitur}{iFold,1} = 0;
+            CM1_46_FP_{1,iFitur}{iFold,1} = 0;
+        %---------------------------------------    
+        % Ada anggota C2, maka hitung TP dan FP
+        %---------------------------------------
+        else 
+            %--------------------------------
+            % Cek anggota C2 untuk TP dan FP
+            %--------------------------------
+            for iBarisC2 = 1 : size(CM1_43_Test_Anggota_C2{1,iFitur}{iFold,1},1)
+                if CM1_43_Test_Anggota_C2{1,iFitur}{iFold,1}(iBarisC2,iFitur+1) == 1
+                    countTP = countTP + 1;
+                    CM1_45_TP_{1,iFitur}{iFold,1} = countTP;
+                else
+                    countFP = countFP + 1;
+                    CM1_46_FP_{1,iFitur}{iFold,1} = countFP;
+                end            
+            end                                          
+        end
+        %--------------------------------------------------
+        % Kondisi kalau kelasnya 0 semua atau 1 semua di C2
+        %--------------------------------------------------
+        if countFP == size(CM1_43_Test_Anggota_C2{1,iFitur}{iFold,1},1)
+            CM1_45_TP_{1,iFitur}{iFold,1} = 0;
+        elseif countTP == size(CM1_43_Test_Anggota_C2{1,iFitur}{iFold,1},1)
+            CM1_46_FP_{1,iFitur}{iFold,1} = 0;
         end
         clear countTP countFP iBarisC2;
-        
-        %--------------------------------
-        % Cek anggota C2 untuk FN dan TN
-        %--------------------------------
-        countFN = 0;
-        countTN = 0;
-        for iBarisC2 = 1 : size(CM1_42_Test_Anggota_C1{1,iFitur}{iFold,1},1)
-            if CM1_42_Test_Anggota_C1{1,iFitur}{iFold,1}(iBarisC2,iFitur+1) == 1
-                countFN = countFN + 1;
-                FN{1,iFitur}{iFold,1} = countFN;                
-            else
-                countTN = countTN + 1;
-                TN{1,iFitur}{iFold,1} = countTN;
-                FN{1,iFitur}{iFold,1} = 0;
-            end            
-        end        
+                               
+%==============================================================================================
+%                             ==  CM1_47_FN_ && CM1_48_TN_  ===
+%============================================================================================== 
+              
         %-----------------------------------------
         % Kalau anggota C1 emang gada sama sekali
         %-----------------------------------------
+        countFN = 0;
+        countTN = 0;   
         if size(CM1_42_Test_Anggota_C1{1,iFitur}{iFold,1},1) == 0
-            FN{1,iFitur}{iFold,1} = 0;
-            TN{1,iFitur}{iFold,1} = 0;
+            CM1_47_FN_{1,iFitur}{iFold,1} = 0;
+            CM1_48_TN_{1,iFitur}{iFold,1} = 0;
+        %----------------
+        % C1 ada anggota
+        %----------------
+        else    
+            %--------------------------------
+            % Cek anggota C2 untuk FN dan TN
+            %--------------------------------
+            for iBarisC2 = 1 : size(CM1_42_Test_Anggota_C1{1,iFitur}{iFold,1},1)
+                if CM1_42_Test_Anggota_C1{1,iFitur}{iFold,1}(iBarisC2,iFitur+1) == 1
+                    countFN = countFN + 1;
+                    CM1_47_FN_{1,iFitur}{iFold,1} = countFN;                
+                else
+                    countTN = countTN + 1;
+                    CM1_48_TN_{1,iFitur}{iFold,1} = countTN;
+                end            
+            end                    
+        end  
+        %--------------------------------------------------
+        % Kondisi kalau kelasnya 0 semua atau 1 semua di C1
+        %--------------------------------------------------
+        if countFN == size(CM1_42_Test_Anggota_C1{1,iFitur}{iFold,1},1)
+            CM1_48_TN_{1,iFitur}{iFold,1} = 0;
+        elseif countTN == size(CM1_42_Test_Anggota_C1{1,iFitur}{iFold,1},1)
+            CM1_47_FN_{1,iFitur}{iFold,1} = 0;
         end
-        %-----------------------------------------------
-        % Kondisi kalau semua anggoa C1 itu FALSE semua
-        %-----------------------------------------------
-        counterCekTrue{1,iFitur}{iFold,1} = 0;
-        for iCekTrue = 1 : size(CM1_42_Test_Anggota_C1{1,iFitur}{iFold,1},1)
-            if CM1_42_Test_Anggota_C1{1,iFitur}{iFold,1}(iCekTrue,3) == 0
-                counterCekTrue{1,iFitur}{iFold,1} = counterCekTrue{1,iFitur}{iFold,1} + 1;
-            end        
-        end
-        if size(counterCekTrue{1,iFitur}{iFold,1},1) == size(CM1_42_Test_Anggota_C1{1,iFitur}{iFold,1},1)
-            FN{1,iFitur}{iFold,1} = 0;
-        end
-        
-        
-        
         clear countFN countTN iBarisC2;
         
-        % pd = tp/(tp+fn)        
-        PD{1,iFitur}{iFold,1} = TP{1,iFitur}{iFold,1}/(TP{1,iFitur}{iFold,1}+FN{1,iFitur}{iFold,1});
+%==============================================================================================
+%                                ==  CM1_49_PD && CM1_50_PF  ===
+%==============================================================================================
         
+        %-----------------
+        % pd = tp/(tp+fn)
+        %-----------------
+        CM1_49_PD{1,iFitur}{iFold,1} = CM1_45_TP_{1,iFitur}{iFold,1}/(CM1_45_TP_{1,iFitur}{iFold,1}+CM1_47_FN_{1,iFitur}{iFold,1});
+        
+        %-----------------
         % pf = fp/(fp+tn)        
-        PF{1,iFitur}{iFold,1} = FP{1,iFitur}{iFold,1}/(FP{1,iFitur}{iFold,1}+TN{1,iFitur}{iFold,1});
+        %-----------------
+        CM1_50_PF{1,iFitur}{iFold,1} = CM1_46_FP_{1,iFitur}{iFold,1}/(CM1_46_FP_{1,iFitur}{iFold,1}+CM1_48_TN_{1,iFitur}{iFold,1});
         
         % bal = 1 - ( sqrt((0-pf)^2+(1-pd)^2) / sqrt(2) )
         
+%**************************************************************************************************************************        
+        
+% %==============================================================================================
+% %     ==  CM1_51_Koreksi_FP_C1 , CM1_52_Koreksi_TP_C1 , CM1_53_FN_C1 , CM1_54_TN_C1 ===
+% %==============================================================================================    
+%         actual = CM1_03_Test{1,iFitur}{iFold,1}(iBarisAvg,iFitur+1);        
+%         prediksi = CM1_41_Test_Avg_HamDist{1,iFitur}{iFold,1}(iBarisAvg,3); 
+%         koreksi_TP_C1 = 0;
+%         koreksi_FN_C1 = 0;
+%         koreksi_TN_C1 = 0;
+%         koreksi_FP_C1 = 0;
+%         for iBarisAvg = 1 : size(CM1_41_Test_Avg_HamDist{1,iFitur}{iFold,1},1)
+%             %----
+%             % TP C1
+%             %----
+%             if (actual == 0) && (prediksi == 11111)  
+%                 
+%             %----
+%             % FN C1
+%             %----
+%             elseif(actual == 0) && (prediksi == 22222)  
+%                 
+%             %----
+%             % FP C1
+%             %----
+%             elseif(actual == 1) && (prediksi == 11111)
+%                 
+%             %----
+%             % TN C1
+%             %----
+%             elseif(actual == 1) && (prediksi == 22222)    
+%              
+%                 
+%             end                
+%         end
+%         %------------------
+%         % Hitung PD dan PF
+%         %------------------
+%         
+%         clear iBarisAvg;
+% %==============================================================================================
+% %                             ==  CM1_53_FN && CM1_54_TN  ===
+% %============================================================================================== 
+%         for iBarisAvg = 1 : size(CM1_41_Test_Avg_HamDist{1,iFitur}{iFold,1},1)
+%             
+%         end
+%         clear iBarisAvg;
+% %==============================================================================================
+% %                             ==  CM1_55_PD && CM1_56_PF  ===
+% %==============================================================================================
+
     %---    
     end
 %---
