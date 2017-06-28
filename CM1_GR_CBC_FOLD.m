@@ -751,7 +751,7 @@ toc
 
 disp('Saving...');
     tic
-        save('04_CBC\CM1_GR_CBC_FOLD.mat');        
+        save('04_CBC\CM1_GR_CBC_FOLD_10.mat');        
     toc
 disp('Done!');
 
