@@ -6,18 +6,21 @@ tic
 clc; clear;
 
 %--------------
-% Load file GR 
+% Load file IG 
 %--------------
-CM1_01_GR = csvread('03_SeleksiFitur\CM1_GR\CM1_GR.csv');
+CM1_01_IG = csvread('03_SeleksiFitur\CM1_IG\CM1_IG.csv');
 
 %-------------
-% K-Fold = 10
+% K-Fold = 5
 %-------------
-k = 10;
-vektorCM1 = CM1_01_GR(:,1);
+k = 5;
+vektorCM1 = CM1_01_IG(:,1);
+rng(1);
 cvFolds = crossvalind('Kfold', vektorCM1, k);
 clear vektorCM1; 
-    
+  
+disp('Calculation in progress...');
+
 for iFitur = 1 : 21
 %---
     for iFold = 1 : k
@@ -39,15 +42,15 @@ for iFitur = 1 : 21
         %------------------------------------------------------------------
         iTraining = 1; 
         iTesting = 1;                     
-        for iBarisData = 1 : length(CM1_01_GR)            
+        for iBarisData = 1 : length(CM1_01_IG)            
             if CM1_00_TrainIdx(iBarisData,iFold) == 1 %---- TRAINING                 
-                CM1_02_Train{1,iFitur}{iFold,1}(iTraining,1:iFitur) = CM1_01_GR(iTraining,1:iFitur); 
-                CM1_02_Train{1,iFitur}{iFold,1}(iTraining,iFitur+1) = CM1_01_GR(iTraining,22); % Tambah kelas
+                CM1_02_Train{1,iFitur}{iFold,1}(iTraining,1:iFitur) = CM1_01_IG(iTraining,1:iFitur); 
+                CM1_02_Train{1,iFitur}{iFold,1}(iTraining,iFitur+1) = CM1_01_IG(iTraining,22); % Tambah kelas
                 CM1_02_Train{1,iFitur}{iFold,1}(iTraining,iFitur+2) = iBarisData; % Tambah urutan data
                 iTraining = iTraining + 1;            
             else %---- TESTING                                        
-                CM1_03_Test{1,iFitur}{iFold,1}(iTesting,1:iFitur) = CM1_01_GR(iTesting,1:iFitur);            
-                CM1_03_Test{1,iFitur}{iFold,1}(iTesting,iFitur+1) = CM1_01_GR(iTesting,22); % Tambah kelas
+                CM1_03_Test{1,iFitur}{iFold,1}(iTesting,1:iFitur) = CM1_01_IG(iTesting,1:iFitur);            
+                CM1_03_Test{1,iFitur}{iFold,1}(iTesting,iFitur+1) = CM1_01_IG(iTesting,22); % Tambah kelas
                 CM1_03_Test{1,iFitur}{iFold,1}(iTesting,iFitur+2) = iBarisData; % Tambah urutan data
                 iTesting = iTesting + 1;
             end                        
@@ -681,12 +684,20 @@ for iFitur = 1 : 21
         %-----------------
         % pd = tp/(tp+fn)
         %-----------------
-        CM1_49_PD{1,iFitur}{iFold,1} = CM1_45_TP_{1,iFitur}{iFold,1}/(CM1_45_TP_{1,iFitur}{iFold,1}+CM1_47_FN_{1,iFitur}{iFold,1});
+        CM1_49_PD{1,iFitur}(iFold,1) = CM1_45_TP_{1,iFitur}{iFold,1}/(CM1_45_TP_{1,iFitur}{iFold,1}+CM1_47_FN_{1,iFitur}{iFold,1});
+        %-----------------
+        % Hitung MEAN pd
+        %-----------------
+        CM1_50_Mean_PD(1,iFitur) = (mean(CM1_49_PD{1,iFitur}(:,1)))*100; % Mean hitung ke bawah, bukan ke samping
         
         %-----------------
         % pf = fp/(fp+tn)        
         %-----------------
-        CM1_50_PF{1,iFitur}{iFold,1} = CM1_46_FP_{1,iFitur}{iFold,1}/(CM1_46_FP_{1,iFitur}{iFold,1}+CM1_48_TN_{1,iFitur}{iFold,1});
+        CM1_51_PF{1,iFitur}(iFold,1) = CM1_46_FP_{1,iFitur}{iFold,1}/(CM1_46_FP_{1,iFitur}{iFold,1}+CM1_48_TN_{1,iFitur}{iFold,1});
+        %-----------------
+        % Hitung MEAN pf
+        %-----------------
+        CM1_52_Mean_PF(1,iFitur) = (mean(CM1_51_PF{1,iFitur}(:,1)))*100; % Mean hitung ke bawah, bukan ke samping
         
         % bal = 1 - ( sqrt((0-pf)^2+(1-pd)^2) / sqrt(2) )
         
@@ -751,7 +762,7 @@ toc
 
 disp('Saving...');
     tic
-        save('04_CBC\CM1_GR_CBC_FOLD_10.mat');        
+        save('04_CBC\CM1_IG_CBC_FOLD_5.mat');        
     toc
 disp('Done!');
 
