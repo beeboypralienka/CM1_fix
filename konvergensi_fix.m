@@ -18,7 +18,7 @@
                     % Kondisi kalau baris datanya cuma 1, ga usah hitung mean
                     %---------------------------------------------------------
                     if size(CM1_27_Anggota_C2_Temp{1,iFitur}{iFold,1},1) == 1
-                        CM1_30_Mean_C2_Temp{1,iFitur}{iFold,1}(1,:) = CM1_27_Anggota_C2_Temp{1,iFitur}{iFold,1};
+                        CM1_30_Mean_C2_Temp{1,iFitur}{iFold,1}(1,:) = CM1_27_Anggota_C2_Temp{1,iFitur}{iFold,1}(:,1:iFitur); %Nambahin "(:,1:iFitur)" doang
                     else CM1_30_Mean_C2_Temp{1,iFitur}{iFold,1}(1,:) = mean(CM1_27_Anggota_C2_Temp{1,iFitur}{iFold,1}(:,1:iFitur));       
                     end                  
                 end
